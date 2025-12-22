@@ -24,7 +24,7 @@ export default function RegisterPage() {
   const passwordStrength = getPasswordStrength();
   const validationHints = [
     { text: 'At least 8 characters', valid: formData.password.length >= 8 },
-    { text: 'Uppercase letter', valid: /[A-Z]/.test(formData.password) },
+    { text: 'Contains uppercase', valid: /[A-Z]/.test(formData.password) },
     { text: 'Contains number', valid: /\d/.test(formData.password) },
     { text: 'Special character', valid: /[!@#$%^&*]/.test(formData.password) }
   ];
@@ -52,8 +52,7 @@ export default function RegisterPage() {
               <label className="block text-sm text-gray-300 mb-2">NID Number</label>
               <div className="relative">
                 <CreditCard className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                <Input type="text" placeholder="Enter NID number" className="pl-10 bg-white/5 border-white/20 text-white"
-                  value={formData.nid} onChange={(e) => setFormData(p => ({ ...p, nid: e.target.value }))} />
+                <Input type="text" placeholder="Enter NID" className="pl-10 bg-white/5 border-white/20 text-white" value={formData.nid} onChange={(e) => setFormData(p => ({ ...p, nid: e.target.value }))} />
               </div>
             </div>
 
@@ -61,26 +60,23 @@ export default function RegisterPage() {
               <label className="block text-sm text-gray-300 mb-2">Full Name</label>
               <div className="relative">
                 <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                <Input type="text" placeholder="Enter full name" className="pl-10 bg-white/5 border-white/20 text-white"
-                  value={formData.fullName} onChange={(e) => setFormData(p => ({ ...p, fullName: e.target.value }))} />
+                <Input type="text" placeholder="Enter full name" className="pl-10 bg-white/5 border-white/20 text-white" value={formData.fullName} onChange={(e) => setFormData(p => ({ ...p, fullName: e.target.value }))} />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm text-gray-300 mb-2">Email Address</label>
+              <label className="block text-sm text-gray-300 mb-2">Email</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                <Input type="email" placeholder="Enter email" className="pl-10 bg-white/5 border-white/20 text-white"
-                  value={formData.email} onChange={(e) => setFormData(p => ({ ...p, email: e.target.value }))} />
+                <Input type="email" placeholder="Enter email" className="pl-10 bg-white/5 border-white/20 text-white" value={formData.email} onChange={(e) => setFormData(p => ({ ...p, email: e.target.value }))} />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm text-gray-300 mb-2">Contact Number</label>
+              <label className="block text-sm text-gray-300 mb-2">Phone</label>
               <div className="relative">
                 <Phone className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                <Input type="tel" placeholder="Enter phone number" className="pl-10 bg-white/5 border-white/20 text-white"
-                  value={formData.phone} onChange={(e) => setFormData(p => ({ ...p, phone: e.target.value }))} />
+                <Input type="tel" placeholder="Enter phone" className="pl-10 bg-white/5 border-white/20 text-white" value={formData.phone} onChange={(e) => setFormData(p => ({ ...p, phone: e.target.value }))} />
               </div>
             </div>
 
@@ -88,9 +84,7 @@ export default function RegisterPage() {
               <label className="block text-sm text-gray-300 mb-2">Password</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                <Input type={showPassword ? 'text' : 'password'} placeholder="Create password" 
-                  className="pl-10 pr-10 bg-white/5 border-white/20 text-white"
-                  value={formData.password} onChange={(e) => setFormData(p => ({ ...p, password: e.target.value }))} />
+                <Input type={showPassword ? 'text' : 'password'} placeholder="Create password" className="pl-10 pr-10 bg-white/5 border-white/20 text-white" value={formData.password} onChange={(e) => setFormData(p => ({ ...p, password: e.target.value }))} />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-gray-400 hover:text-white">
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -99,15 +93,15 @@ export default function RegisterPage() {
                 <div className="mt-3">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                      <div className={`h-full ${passwordStrength.color} transition-all`} style={{ width: `${passwordStrength.level * 33.33}%` }} />
+                      <div className={`h-full ${passwordStrength.color} transition-all`} style={{ width: `${passwordStrength.level * 33}%` }} />
                     </div>
                     <span className="text-xs text-gray-400">{passwordStrength.text}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-1">
-                    {validationHints.map((hint) => (
-                      <div key={hint.text} className="flex items-center gap-1 text-xs">
-                        {hint.valid ? <CheckCircle className="h-3 w-3 text-green-400" /> : <XCircle className="h-3 w-3 text-gray-500" />}
-                        <span className={hint.valid ? 'text-green-400' : 'text-gray-500'}>{hint.text}</span>
+                    {validationHints.map((h) => (
+                      <div key={h.text} className="flex items-center gap-1 text-xs">
+                        {h.valid ? <CheckCircle className="h-3 w-3 text-green-400" /> : <XCircle className="h-3 w-3 text-gray-500" />}
+                        <span className={h.valid ? 'text-green-400' : 'text-gray-500'}>{h.text}</span>
                       </div>
                     ))}
                   </div>
