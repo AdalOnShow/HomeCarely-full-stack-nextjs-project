@@ -1,14 +1,24 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
+
 const poppins = Poppins({
   weight: ["200", "400", "500", "600", "700"],
+  subsets: ["latin"],
 });
+
+export const metadata = {
+  title: "HomeCarely - Premium Caregiving Services",
+  description: "Trusted caregiving services for your loved ones. Baby care, elderly care, and sick care with professional caregivers.",
+};
 
 const RootLayout = ({ children }) => {
   return (
-    <html className={`${poppins.className}`}>
-      <body className="">{children}</body>
+    <html lang="en" className={`dark ${poppins.className}`}>
+      <body className="min-h-screen bg-background text-foreground antialiased">
+        {children}
+      </body>
     </html>
   );
 };
+
 export default RootLayout;
