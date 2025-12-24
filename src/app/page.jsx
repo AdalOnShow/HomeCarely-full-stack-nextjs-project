@@ -22,6 +22,31 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+export const metadata = {
+  title: "HomeCarely - Professional Home Caregiving Services",
+  description:
+    "HomeCarely provides trusted, professional caregiving services for your loved ones. Expert baby care, elderly care, and sick care with certified caregivers available 24/7.",
+  keywords: [
+    "home care",
+    "caregiving services",
+    "baby care",
+    "elderly care",
+    "sick care",
+    "professional caregivers",
+    "home nursing",
+    "senior care",
+    "newborn care",
+    "HomeCarely",
+  ],
+  openGraph: {
+    title: "HomeCarely - Professional Home Caregiving Services",
+    description:
+      "Trusted caregiving services for your loved ones. Baby care, elderly care, and sick care with professional, certified caregivers.",
+    type: "website",
+    siteName: "HomeCarely",
+  },
+};
+
 const services = [
   {
     id: "baby-care",

@@ -98,6 +98,36 @@ export function generateStaticParams() {
   return Object.keys(serviceData).map((id) => ({ service_id: id }));
 }
 
+export async function generateMetadata({ params }) {
+  const { service_id } = await params;
+  const service = serviceData[service_id];
+
+  if (!service) {
+    return {
+      title: "Service Not Found | HomeCarely",
+      description: "The requested service could not be found.",
+    };
+  }
+
+  return {
+    title: `${service.title} | HomeCarely`,
+    description: service.shortDescription,
+    keywords: [
+      service.title.toLowerCase(),
+      "home care",
+      "caregiving",
+      "HomeCarely",
+      service_id.replace("-", " "),
+    ],
+    openGraph: {
+      title: `${service.title} | HomeCarely`,
+      description: service.shortDescription,
+      type: "website",
+      siteName: "HomeCarely",
+    },
+  };
+}
+
 export default async function ServiceDetailPage({ params }) {
   const { service_id } = await params;
   const service = serviceData[service_id];
