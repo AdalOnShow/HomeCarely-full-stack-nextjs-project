@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { dbConnect } from "../../../../lib/dbConnect";
 import bcrypt from "bcrypt";
 
@@ -19,7 +20,7 @@ export const authOptions = {
           placeholder: "Enter your password",
         },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const userCollection = await dbConnect("users");
         const user = await userCollection.findOne({ email: credentials.email });
 
@@ -36,10 +37,36 @@ export const authOptions = {
           return null;
         }
 
-        return user;
+        return {
+          id: user._id.toString(),
+          email: user.email,
+          name: user.name,
+        };
       },
     }),
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
   ],
+  pages: {
+    signIn: "/login",
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id;
+      }
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
