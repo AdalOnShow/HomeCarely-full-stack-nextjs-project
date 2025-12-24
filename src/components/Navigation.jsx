@@ -89,15 +89,14 @@ export default function Navigation() {
               </div>
             ) : (
               <>
-                {/* <Link href="/login"> */}
-                <Button
-                  onClick={() => signIn()}
-                  variant="ghost"
-                  className="text-gray-300 hover:text-white transition-colors duration-300"
-                >
-                  Login
-                </Button>
-                {/* </Link> */}
+                <Link href="/login">
+                  <Button
+                    variant="ghost"
+                    className="text-gray-300 hover:text-white transition-colors duration-300"
+                  >
+                    Login
+                  </Button>
+                </Link>
                 <Link href="/register">
                   <Button className="btn-premium text-white font-medium hover:scale-105 transition-transform duration-300">
                     Get Started
@@ -150,16 +149,14 @@ export default function Navigation() {
                 </div>
               ) : (
                 <>
-                  <Button
-                    onClick={() => {
-                      setIsOpen(false);
-                      signIn();
-                    }}
-                    variant="ghost"
-                    className="w-full justify-start text-gray-300"
-                  >
-                    Login
-                  </Button>
+                  <Link href="/login" onClick={() => setIsOpen(false)}>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-gray-300"
+                    >
+                      Login
+                    </Button>
+                  </Link>
                   <Link href="/register" onClick={() => setIsOpen(false)}>
                     <Button className="w-full btn-premium text-white">
                       Get Started
