@@ -57,10 +57,10 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500">
+              <div className="p-2 rounded-lg bg-linear-to-r from-blue-500 to-cyan-500">
                 <Heart className="h-6 w-6 text-white" />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                 HomeCarely
               </span>
             </Link>

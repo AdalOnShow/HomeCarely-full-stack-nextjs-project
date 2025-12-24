@@ -2,6 +2,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
+import AuthProvider from "../providers/AuthProvider";
 
 const poppins = Poppins({
   weight: ["200", "400", "500", "600", "700"],
@@ -18,8 +19,10 @@ const RootLayout = ({ children }) => {
   return (
     <html lang="en" className={`dark ${poppins.className}`}>
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <Navigation />
-        {children}
+        <AuthProvider>
+          <Navigation />
+          {children}
+        </AuthProvider>
         <Footer />
       </body>
     </html>

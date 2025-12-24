@@ -113,9 +113,9 @@ export default async function ServiceDetailPage({ params }) {
           className={`absolute inset-0 bg-linear-to-b ${service.bgGradient}`}
         />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent" />
-        <div className="absolute right-10 top-20 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-float" />
+        <div className="absolute -right-20 top-20 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-float" />
         <div
-          className="absolute left-10 bottom-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-float"
+          className="absolute -left-20 bottom-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-float"
           style={{ animationDelay: "1.5s" }}
         />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

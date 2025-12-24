@@ -4,9 +4,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Heart, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const { data: user, status } = useSession();
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -45,19 +47,33 @@ export default function Navigation() {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link href="/login">
+            {status === "loading" ? (
+              <p>Loading...</p>
+            ) : user ? (
               <Button
-                variant="ghost"
-                className="text-gray-300 hover:text-white transition-colors duration-300"
+                onClick={() => signOut()}
+                className="btn-premium text-white font-medium hover:scale-105 transition-transform duration-300"
               >
-                Login
+                Logout
               </Button>
-            </Link>
-            <Link href="/register">
-              <Button className="btn-premium text-white font-medium hover:scale-105 transition-transform duration-300">
-                Get Started
-              </Button>
-            </Link>
+            ) : (
+              <>
+                {/* <Link href="/login"> */}
+                <Button
+                  onClick={() => signIn()}
+                  variant="ghost"
+                  className="text-gray-300 hover:text-white transition-colors duration-300"
+                >
+                  Login
+                </Button>
+                {/* </Link> */}
+                <Link href="/register">
+                  <Button className="btn-premium text-white font-medium hover:scale-105 transition-transform duration-300">
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
