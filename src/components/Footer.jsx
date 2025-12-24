@@ -112,7 +112,7 @@ export default function Footer() {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="text-gray-400 text-sm mb-4 md:mb-0">
-            © 2024 HomeCarely. All rights reserved. Made with ❤️ for better
+            © 2026 HomeCarely. All rights reserved. Made with ❤️ for better
             care.
           </div>
 

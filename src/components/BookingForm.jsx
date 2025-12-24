@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,8 +29,11 @@ import {
   CheckCircle,
   ArrowRight,
   ArrowLeft,
+  Loader2,
 } from "lucide-react";
 import { locations } from "@/data/locations";
+import { booking } from "@/services/booking.service";
+import Swal from "sweetalert2";
 
 const serviceInfo = {
   "baby-care": {
@@ -61,7 +66,10 @@ const steps = [
 ];
 
 export default function BookingForm({ serviceId }) {
+  const { data: user, status } = useSession();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [bookingData, setBookingData] = useState({
     duration: "",
     durationType: "",
@@ -148,6 +156,56 @@ export default function BookingForm({ serviceId }) {
 
   const handleAreaChange = (value) => {
     setBookingData((prev) => ({ ...prev, area: value }));
+  };
+
+  const handleConfirmBooking = async () => {
+    if (status !== "authenticated" || !user?.user) {
+      Swal.fire({
+        icon: "error",
+        title: "Not Logged In",
+        text: "Please login to confirm your booking.",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    const fullAddress = `${bookingData.address}, ${bookingData.area}, ${bookingData.city}, ${bookingData.district}, ${bookingData.division}`;
+
+    const payload = {
+      serviceId,
+      duration: parseInt(bookingData.duration),
+      durationType: bookingData.durationType,
+      totalCost,
+      address: fullAddress,
+      userEmail: user.user.email,
+      userName: user.user.name,
+    };
+
+    try {
+      const result = await booking(payload);
+      if (result?.massage) {
+        Swal.fire({
+          icon: "error",
+          title: "Booking Failed",
+          text: result.massage,
+        });
+      } else {
+        await Swal.fire({
+          icon: "success",
+          title: "Booking Confirmed!",
+          text: "Your booking has been successfully placed.",
+        });
+        router.push("/my-bookings");
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const nextStep = () => currentStep < 3 && setCurrentStep(currentStep + 1);
@@ -477,8 +535,19 @@ export default function BookingForm({ serviceId }) {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               ) : (
-                <Button disabled className="btn-premium text-white opacity-50">
-                  Confirm Booking
+                <Button
+                  onClick={handleConfirmBooking}
+                  disabled={isLoading}
+                  className="btn-premium text-white hover:scale-105 transition-transform duration-300"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    "Confirm Booking"
+                  )}
                 </Button>
               )}
             </div>
