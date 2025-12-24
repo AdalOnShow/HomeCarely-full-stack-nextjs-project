@@ -14,3 +14,15 @@ export const booking = async (bookingData) => {
   }
   return response.json();
 };
+
+export const getBookings = async (email) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/booking?email=${encodeURIComponent(email)}`,
+    { cache: "no-store" }
+  );
+
+  if (!response.ok) {
+    return [];
+  }
+  return response.json();
+};
