@@ -5,10 +5,34 @@ import { Button } from "@/components/ui/button";
 import { Heart, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Swal from "sweetalert2";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const { data: user, status } = useSession();
+
+  const handleSignOut = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to logout!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, logout!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        signOut();
+        Swal.fire({
+          title: "LogOut Success!",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  };
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -50,12 +74,18 @@ export default function Navigation() {
             {status === "loading" ? (
               <p>Loading...</p>
             ) : user ? (
-              <Button
-                onClick={() => signOut()}
-                className="btn-premium text-white font-medium hover:scale-105 transition-transform duration-300"
-              >
-                Logout
-              </Button>
+              <div className="flex gap-2 items-center">
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <Button
+                  onClick={handleSignOut}
+                  className="btn-premium text-white font-medium hover:scale-105 transition-transform duration-300"
+                >
+                  Logout
+                </Button>
+              </div>
             ) : (
               <>
                 {/* <Link href="/login"> */}
@@ -104,19 +134,38 @@ export default function Navigation() {
               </Link>
             ))}
             <div className="flex flex-col space-y-2 pt-4 border-t border-white/10">
-              <Link href="/login" onClick={() => setIsOpen(false)}>
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start text-gray-300"
-                >
-                  Login
-                </Button>
-              </Link>
-              <Link href="/register" onClick={() => setIsOpen(false)}>
-                <Button className="w-full btn-premium text-white">
-                  Get Started
-                </Button>
-              </Link>
+              {user ? (
+                <div className="flex gap-2 items-center">
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                  <Button
+                    onClick={handleSignOut}
+                    className="btn-premium text-white w-full"
+                  >
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Button
+                    onClick={() => {
+                      setIsOpen(false);
+                      signIn();
+                    }}
+                    variant="ghost"
+                    className="w-full justify-start text-gray-300"
+                  >
+                    Login
+                  </Button>
+                  <Link href="/register" onClick={() => setIsOpen(false)}>
+                    <Button className="w-full btn-premium text-white">
+                      Get Started
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -22,15 +22,20 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { signup } from "../services/user.service";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 export default function RegisterFormClient() {
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     password: "",
   });
+  const router = useRouter();
 
   const getPasswordStrength = () => {
     const { password } = formData;
@@ -50,10 +55,35 @@ export default function RegisterFormClient() {
     { text: "Special character", valid: /[!@#$%^&*]/.test(formData.password) },
   ];
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted:", formData);
+    setIsSubmitting(true);
+    const res = await signup(formData);
+
+    if (res.message === "User created successfully") {
+      Swal.fire({
+        title: "User Create Success!",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setIsSubmitting(false);
+      router.push("/");
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+      });
+    } else {
+      Swal.fire({
+        title: res.message || "Failed to create account",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -193,7 +223,10 @@ export default function RegisterFormClient() {
               </div>
 
               <Button className="w-full btn-premium text-white font-semibold py-3 hover:scale-105 transition-transform duration-300">
-                <input type="submit" value=" Create Account" />
+                <input
+                  type="submit"
+                  value={isSubmitting ? "Creating ...." : `Create Account`}
+                />
               </Button>
 
               <div className="relative">

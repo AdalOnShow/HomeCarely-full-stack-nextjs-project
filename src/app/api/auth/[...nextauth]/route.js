@@ -1,12 +1,18 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { dbConnect } from "../../../../lib/dbConnect";
+import bcrypt from "bcrypt";
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "Enter Your Email",
+        },
         password: {
           label: "Password",
           type: "password",
@@ -14,13 +20,23 @@ export const authOptions = {
         },
       },
       async authorize(credentials, req) {
-        const user = { id: "1", name: "J Smith", email: "jsmith@example.com" };
+        const userCollection = await dbConnect("users");
+        const user = await userCollection.findOne({ email: credentials.email });
 
-        if (user) {
-          return user;
-        } else {
+        if (!user) {
           return null;
         }
+
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+
+        if (!isPasswordValid) {
+          return null;
+        }
+
+        return user;
       },
     }),
   ],
