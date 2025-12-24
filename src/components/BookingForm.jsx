@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -28,6 +28,7 @@ import {
   ArrowRight,
   ArrowLeft,
 } from "lucide-react";
+import { locations } from "@/data/locations";
 
 const serviceInfo = {
   "baby-care": {
@@ -53,11 +54,6 @@ const serviceInfo = {
   },
 };
 
-const divisions = ["Dhaka", "Chittagong", "Sylhet", "Rajshahi", "Khulna"];
-const districts = ["Dhaka", "Gazipur", "Narayanganj", "Manikganj"];
-const cities = ["Dhaka City", "Savar", "Tongi", "Keraniganj"];
-const areas = ["Dhanmondi", "Gulshan", "Banani", "Uttara", "Mirpur"];
-
 const steps = [
   { number: 1, title: "Duration", icon: Clock },
   { number: 2, title: "Location", icon: MapPin },
@@ -74,22 +70,85 @@ export default function BookingForm({ serviceId }) {
     city: "",
     area: "",
     address: "",
-    totalCost: 0,
   });
 
   const service = serviceInfo[serviceId];
   const Icon = service?.icon || Baby;
 
-  useEffect(() => {
-    if (bookingData.duration && bookingData.durationType && service) {
-      const duration = parseInt(bookingData.duration) || 0;
-      const rate =
-        bookingData.durationType === "hours"
-          ? service.hourlyRate
-          : service.dailyRate;
-      setBookingData((prev) => ({ ...prev, totalCost: duration * rate }));
-    }
+  // Derive totalCost directly instead of using useEffect
+  const totalCost = useMemo(() => {
+    if (!bookingData.duration || !bookingData.durationType || !service) return 0;
+    const duration = parseInt(bookingData.duration) || 0;
+    const rate = bookingData.durationType === "hours" ? service.hourlyRate : service.dailyRate;
+    return duration * rate;
   }, [bookingData.duration, bookingData.durationType, service]);
+
+  // Cascading location options using Set for uniqueness
+  const divisions = useMemo(() => 
+    [...new Set(locations.map((loc) => loc.region))],
+    []
+  );
+
+  const districts = useMemo(() => {
+    if (!bookingData.division) return [];
+    return [...new Set(
+      locations
+        .filter((loc) => loc.region === bookingData.division)
+        .map((loc) => loc.district)
+    )];
+  }, [bookingData.division]);
+
+  const cities = useMemo(() => {
+    if (!bookingData.district) return [];
+    return [...new Set(
+      locations
+        .filter((loc) => loc.region === bookingData.division && loc.district === bookingData.district)
+        .map((loc) => loc.city)
+    )];
+  }, [bookingData.division, bookingData.district]);
+
+  const areas = useMemo(() => {
+    if (!bookingData.city) return [];
+    const entry = locations.find(
+      (loc) =>
+        loc.region === bookingData.division &&
+        loc.district === bookingData.district &&
+        loc.city === bookingData.city
+    );
+    return entry ? [...new Set(entry.covered_area)] : [];
+  }, [bookingData.division, bookingData.district, bookingData.city]);
+
+  // Handlers with proper child resets
+  const handleDivisionChange = (value) => {
+    setBookingData((prev) => ({
+      ...prev,
+      division: value,
+      district: "",
+      city: "",
+      area: "",
+    }));
+  };
+
+  const handleDistrictChange = (value) => {
+    setBookingData((prev) => ({
+      ...prev,
+      district: value,
+      city: "",
+      area: "",
+    }));
+  };
+
+  const handleCityChange = (value) => {
+    setBookingData((prev) => ({
+      ...prev,
+      city: value,
+      area: "",
+    }));
+  };
+
+  const handleAreaChange = (value) => {
+    setBookingData((prev) => ({ ...prev, area: value }));
+  };
 
   const nextStep = () => currentStep < 3 && setCurrentStep(currentStep + 1);
   const prevStep = () => currentStep > 1 && setCurrentStep(currentStep - 1);
@@ -255,9 +314,7 @@ export default function BookingForm({ serviceId }) {
                       </label>
                       <Select
                         value={bookingData.division}
-                        onValueChange={(v) =>
-                          setBookingData((p) => ({ ...p, division: v }))
-                        }
+                        onValueChange={handleDivisionChange}
                       >
                         <SelectTrigger className="bg-white/5 border-white/20 text-white">
                           <SelectValue placeholder="Select" />
@@ -277,9 +334,8 @@ export default function BookingForm({ serviceId }) {
                       </label>
                       <Select
                         value={bookingData.district}
-                        onValueChange={(v) =>
-                          setBookingData((p) => ({ ...p, district: v }))
-                        }
+                        onValueChange={handleDistrictChange}
+                        disabled={!bookingData.division}
                       >
                         <SelectTrigger className="bg-white/5 border-white/20 text-white">
                           <SelectValue placeholder="Select" />
@@ -299,9 +355,8 @@ export default function BookingForm({ serviceId }) {
                       </label>
                       <Select
                         value={bookingData.city}
-                        onValueChange={(v) =>
-                          setBookingData((p) => ({ ...p, city: v }))
-                        }
+                        onValueChange={handleCityChange}
+                        disabled={!bookingData.district}
                       >
                         <SelectTrigger className="bg-white/5 border-white/20 text-white">
                           <SelectValue placeholder="Select" />
@@ -321,9 +376,8 @@ export default function BookingForm({ serviceId }) {
                       </label>
                       <Select
                         value={bookingData.area}
-                        onValueChange={(v) =>
-                          setBookingData((p) => ({ ...p, area: v }))
-                        }
+                        onValueChange={handleAreaChange}
+                        disabled={!bookingData.city}
                       >
                         <SelectTrigger className="bg-white/5 border-white/20 text-white">
                           <SelectValue placeholder="Select" />
@@ -395,7 +449,7 @@ export default function BookingForm({ serviceId }) {
                     <div className="flex justify-between text-lg font-semibold">
                       <span>Total:</span>
                       <span className="text-green-400">
-                        ${bookingData.totalCost}
+                        ${totalCost}
                       </span>
                     </div>
                   </div>
@@ -462,7 +516,7 @@ export default function BookingForm({ serviceId }) {
                   <div className="flex justify-between text-xl font-bold">
                     <span className="text-white">Total</span>
                     <span className="text-green-400">
-                      ${bookingData.totalCost}
+                      ${totalCost}
                     </span>
                   </div>
                 </div>
