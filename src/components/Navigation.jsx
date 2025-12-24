@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Heart, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Heart, Menu, X } from "lucide-react";
+import { useState } from "react";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { href: '/', label: 'Home' },
-    { href: '/service', label: 'Services' },
-    { href: '/about', label: 'About' },
-    { href: '/contact', label: 'Contact' },
+    { href: "/", label: "Home" },
+    { href: "/service", label: "Services" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
   ];
 
   return (
@@ -21,10 +21,10 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 group">
-            <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 group-hover:scale-110 transition-transform duration-300">
+            <div className="p-2 rounded-lg bg-linear-to-r from-blue-500 to-cyan-500 group-hover:scale-110 transition-transform duration-300">
               <Heart className="h-6 w-6 text-white" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
               HomeCarely
             </span>
           </Link>
@@ -38,7 +38,7 @@ export default function Navigation() {
                 className="text-gray-300 hover:text-white transition-colors duration-300 relative group"
               >
                 {item.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-linear-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300" />
               </Link>
             ))}
           </div>
@@ -46,7 +46,10 @@ export default function Navigation() {
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <Link href="/login">
-              <Button variant="ghost" className="text-gray-300 hover:text-white transition-colors duration-300">
+              <Button
+                variant="ghost"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
                 Login
               </Button>
             </Link>
@@ -68,9 +71,9 @@ export default function Navigation() {
         </div>
 
         {/* Mobile Menu */}
-        <div 
+        <div
           className={`md:hidden border-t border-white/10 overflow-hidden transition-all duration-300 ${
-            isOpen ? 'max-h-96 py-4' : 'max-h-0'
+            isOpen ? "max-h-96 py-4" : "max-h-0"
           }`}
         >
           <div className="flex flex-col space-y-4">
@@ -86,7 +89,10 @@ export default function Navigation() {
             ))}
             <div className="flex flex-col space-y-2 pt-4 border-t border-white/10">
               <Link href="/login" onClick={() => setIsOpen(false)}>
-                <Button variant="ghost" className="w-full justify-start text-gray-300">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-gray-300"
+                >
                   Login
                 </Button>
               </Link>

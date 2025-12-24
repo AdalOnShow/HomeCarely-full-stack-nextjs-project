@@ -1,43 +1,52 @@
-import Link from 'next/link';
-import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
+import Link from "next/link";
+import {
+  Heart,
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export default function Footer() {
   const footerSections = [
     {
-      title: 'Services',
+      title: "Services",
       links: [
-        { href: '/service/baby-care', label: 'Baby Care' },
-        { href: '/service/elderly-care', label: 'Elderly Care' },
-        { href: '/service/sick-care', label: 'Sick Care' },
-        { href: '/service/companion-care', label: 'Companion Care' },
-      ]
+        { href: "/service/baby-care", label: "Baby Care" },
+        { href: "/service/elderly-care", label: "Elderly Care" },
+        { href: "/service/sick-care", label: "Sick Care" },
+        { href: "/service/companion-care", label: "Companion Care" },
+      ],
     },
     {
-      title: 'Company',
+      title: "Company",
       links: [
-        { href: '/about', label: 'About Us' },
-        { href: '/careers', label: 'Careers' },
-        { href: '/blog', label: 'Blog' },
-        { href: '/contact', label: 'Contact' },
-      ]
+        { href: "/about", label: "About Us" },
+        { href: "/careers", label: "Careers" },
+        { href: "/blog", label: "Blog" },
+        { href: "/contact", label: "Contact" },
+      ],
     },
     {
-      title: 'Support',
+      title: "Support",
       links: [
-        { href: '/help', label: 'Help Center' },
-        { href: '/faq', label: 'FAQ' },
-        { href: '/privacy', label: 'Privacy Policy' },
-        { href: '/terms', label: 'Terms of Service' },
-      ]
-    }
+        { href: "/help", label: "Help Center" },
+        { href: "/faq", label: "FAQ" },
+        { href: "/privacy", label: "Privacy Policy" },
+        { href: "/terms", label: "Terms of Service" },
+      ],
+    },
   ];
 
   const socialLinks = [
-    { href: '#', icon: Facebook, label: 'Facebook' },
-    { href: '#', icon: Twitter, label: 'Twitter' },
-    { href: '#', icon: Instagram, label: 'Instagram' },
-    { href: '#', icon: Linkedin, label: 'LinkedIn' },
+    { href: "#", icon: Facebook, label: "Facebook" },
+    { href: "#", icon: Twitter, label: "Twitter" },
+    { href: "#", icon: Instagram, label: "Instagram" },
+    { href: "#", icon: Linkedin, label: "LinkedIn" },
   ];
 
   return (
@@ -56,10 +65,11 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-gray-400 mb-6 max-w-md">
-              Providing compassionate, professional caregiving services for your loved ones. 
-              Trusted by families across the country for quality care that brings peace of mind.
+              Providing compassionate, professional caregiving services for your
+              loved ones. Trusted by families across the country for quality
+              care that brings peace of mind.
             </p>
-            
+
             {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-gray-400">
@@ -84,7 +94,7 @@ export default function Footer() {
               <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link.href}>
-                    <Link 
+                    <Link
                       href={link.href}
                       className="text-gray-400 hover:text-white transition-colors"
                     >
@@ -102,9 +112,10 @@ export default function Footer() {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="text-gray-400 text-sm mb-4 md:mb-0">
-            © 2024 HomeCarely. All rights reserved. Made with ❤️ for better care.
+            © 2024 HomeCarely. All rights reserved. Made with ❤️ for better
+            care.
           </div>
-          
+
           {/* Social Links */}
           <div className="flex items-center space-x-4">
             {socialLinks.map((social) => {

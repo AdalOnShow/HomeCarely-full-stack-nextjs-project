@@ -1,5 +1,5 @@
-import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function BookingLoading() {
   return (
@@ -30,7 +30,10 @@ export default function BookingLoading() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <Card className="glass-card border-white/10">
-                <CardHeader><Skeleton className="h-6 w-40" /><Skeleton className="h-4 w-56 mt-2" /></CardHeader>
+                <CardHeader>
+                  <Skeleton className="h-6 w-40" />
+                  <Skeleton className="h-4 w-56 mt-2" />
+                </CardHeader>
                 <CardContent className="space-y-4">
                   <Skeleton className="h-12 w-full" />
                   <Skeleton className="h-12 w-full" />
@@ -39,7 +42,9 @@ export default function BookingLoading() {
             </div>
             <div className="lg:col-span-1">
               <Card className="glass-card border-white/10">
-                <CardHeader><Skeleton className="h-6 w-32" /></CardHeader>
+                <CardHeader>
+                  <Skeleton className="h-6 w-32" />
+                </CardHeader>
                 <CardContent className="space-y-3">
                   <Skeleton className="h-5 w-full" />
                   <Skeleton className="h-5 w-full" />
